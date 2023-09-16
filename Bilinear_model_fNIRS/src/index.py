@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
 from components.BilinearModel_Hemodynamics import hemodynamics_system
+from components.BilinearModel_Neurodynamics import *
 from components.BilinearModel_Plots import *
 from components.BilinearModel_StimulusGenerator import (
     bilinear_model_stimulus_train_generator,
 )
-from components.Models import *
 from components.Parameters import Parameters
 from scipy.integrate import odeint
 
