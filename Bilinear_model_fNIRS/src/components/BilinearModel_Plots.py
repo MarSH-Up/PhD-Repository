@@ -3,8 +3,8 @@ import numpy as np
 
 
 def plot_neurodynamics(Z, timestamps, fig, ax):
-    for i in range(Z.shape[0]):
-        ax.plot(timestamps, Z[i, :], label=f"Motor Execution {i+1}")
+    for i in range(Z.shape[1]):
+        ax.plot(timestamps, Z[:, i], label=f"Region {i+1}")
 
     ax.set_xlabel("Time (s)")
     ax.set_ylabel("Neurodynamic Value")
