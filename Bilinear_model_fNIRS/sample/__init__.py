@@ -15,14 +15,11 @@ from Bilinear_model_fNIRS.src.components.BilinearModel_Neurodynamics import (
 from Bilinear_model_fNIRS.src.components.BilinearModel_Optics import (
     BilinearModel_Optics,
 )
-from Bilinear_model_fNIRS.src.components.BilinearModel_Plots import (
-    plot_hemodynamics,
-    plot_neurodynamics,
-    plot_Stimulus,
-)
+from Bilinear_model_fNIRS.src.components.BilinearModel_Plots import *
 from Bilinear_model_fNIRS.src.components.BilinearModel_StimulusGenerator import (
     bilinear_model_stimulus_train_generator,
 )
+from Bilinear_model_fNIRS.src.components.BilinerModel_Noises import awgn
 from Bilinear_model_fNIRS.src.components.Parameters import Parameters
 
 
@@ -39,32 +36,29 @@ def fNIRS_Process():
         Parameters["cycles"],
         Parameters["A"].shape[0],
     )
-    print(timestamps.shape)
     Z0 = np.zeros([Parameters["A"].shape[0]])
     Z = Neurodynamics(
         Z0, timestamps, Parameters["A"], Parameters["B"], Parameters["C"], U_stimulus
     )
     qj, pj = Hemodynamics(Z.T, Parameters["P_SD"], Parameters["step"])
-    Y = BilinearModel_Optics(pj, qj, U_stimulus, Parameters["A"], timestamps)
-    print(qj.shape, pj.shape)
-
-    return U_stimulus, timestamps, Z, qj, pj
+    Y, dq, dh = BilinearModel_Optics(pj, qj, U_stimulus, Parameters["A"])
+    return U_stimulus, timestamps, Z, dq, dh, Y
 
 
 def main():
-    U_stimulus, timestamps, Z, qj, pj = fNIRS_Process()
-    fig1, ax1 = plt.subplots(figsize=(10, 6))
-    fig2, ax2 = plt.subplots(figsize=(10, 6))
-    fig3, ax3 = plt.subplots(figsize=(10, 6))
+    U_stimulus, timestamps, Z, qj, pj, Y = fNIRS_Process()
 
-    plot_Stimulus(U_stimulus, timestamps, fig1, ax1)
-    plot_neurodynamics(Z, timestamps, fig2, ax2)
-    plot_hemodynamics(qj, pj, timestamps, fig3, ax3)
+    fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(5, 1, figsize=(10, 18))
 
-    fig1.canvas.mpl_connect("key_press_event", on_key)
-    fig2.canvas.mpl_connect("key_press_event", on_key)
-    fig3.canvas.mpl_connect("key_press_event", on_key)
+    plot_Stimulus(U_stimulus, timestamps, fig, ax1)
+    plot_neurodynamics(Z, timestamps, fig, ax2)
+    plot_DHDQ(qj, pj, timestamps, fig, ax3)
+    plot_Y(Y, timestamps, fig, ax4)
+    noisy_signal = awgn(Y, 5, "measured")
+    plot_Y(noisy_signal, timestamps, fig, ax5)
+    fig.canvas.mpl_connect("key_press_event", on_key)
 
+    plt.tight_layout()
     plt.show()
 
 

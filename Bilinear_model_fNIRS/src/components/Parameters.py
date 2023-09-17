@@ -16,7 +16,7 @@ step = 1 / freq
 
 actionTime = 5
 restTime = 25
-cycles = 3
+cycles = 2
 
 P_SD = np.array(
     [[0.0775, -0.0087], [-0.1066, 0.0299], [0.0440, -0.0129], [0.8043, -0.7577]]

@@ -1,12 +1,12 @@
 import matplotlib.pyplot as plt
-from components.BilinearModel_Hemodynamics import hemodynamics_system
+from components.BilinearModel_Hemodynamics import Hemodynamics
 from components.BilinearModel_Neurodynamics import *
+from components.BilinearModel_Optics import BilinearModel_Optics
 from components.BilinearModel_Plots import *
 from components.BilinearModel_StimulusGenerator import (
     bilinear_model_stimulus_train_generator,
 )
-from components.Parameters import Parameters
-from scipy.integrate import odeint
+from components.Parameters_case5 import Parameters
 
 
 def on_key(event):
@@ -22,55 +22,27 @@ def fNIRS_Process():
         Parameters["cycles"],
         Parameters["A"].shape[0],
     )
-
     Z0 = np.zeros([Parameters["A"].shape[0]])
-    Z = odeint(
-        Neurodynamics_Z,
-        Z0,
-        t=timestamps,
-        args=(Parameters["A"], Parameters["B"], Parameters["C"], U_stimulus),
+    Z = Neurodynamics(
+        Z0, timestamps, Parameters["A"], Parameters["B"], Parameters["C"], U_stimulus
     )
-
-    # Initial conditions
-    # Initial conditions for 2 regions
-    Sj0 = np.array([0, 0])
-    fjin0 = np.array([1, 1])
-    Vj0 = np.array([1, 1])
-    Pj0 = np.array([1, 1])
-    qj0 = np.array([1, 1])
-
-    # Combine initial conditions
-    Y0 = np.concatenate([Sj0, fjin0, Vj0, Pj0, qj0])
-
-    # Parameters from P_SD and H
-    P_SD = np.array(
-        [[0.0775, -0.0087], [-0.1066, 0.0299], [0.0440, -0.0129], [0.8043, -0.7577]]
-    )
-
-    result = odeint(
-        hemodynamics_system,
-        Y0,
-        timestamps,
-        args=(Z, U_stimulus, P_SD, Parameters["A"], Parameters["step"]),
-    )
-
-    Sj, fjin, Vj, pj, qj = result.T
-    print(qj, pj)
-
-    return U_stimulus, timestamps, Z
+    qj, pj = Hemodynamics(Z.T, Parameters["P_SD"], Parameters["step"])
+    Y = BilinearModel_Optics(pj, qj, U_stimulus, Parameters["A"], timestamps)
+    return U_stimulus, timestamps, Z, qj, pj
 
 
 def main():
-    U_stimulus, timestamps, Z = fNIRS_Process()
-    fig1, ax1 = plt.subplots(figsize=(10, 6))
-    fig2, ax2 = plt.subplots(figsize=(10, 6))
+    U_stimulus, timestamps, Z, qj, pj = fNIRS_Process()
 
-    plot_Stimulus(U_stimulus, timestamps, fig1, ax1)
-    plot_neurodynamics(Z, timestamps, fig2, ax2)
+    fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 18))
 
-    fig1.canvas.mpl_connect("key_press_event", on_key)
-    fig2.canvas.mpl_connect("key_press_event", on_key)
+    plot_Stimulus(U_stimulus, timestamps, fig, ax1)
+    plot_neurodynamics(Z, timestamps, fig, ax2)
+    plot_DHDQ(qj, pj, timestamps, fig, ax3)
 
+    fig.canvas.mpl_connect("key_press_event", on_key)
+
+    plt.tight_layout()
     plt.show()
 
 

@@ -43,16 +43,20 @@ C = np.array(
     [
         [0.08, 0, 0, 0, 0],
         [0.06, 0, 0, 0, 0],
-        [0.089, 0, 0, 0, 0],
+        [0.05, 0, 0, 0, 0],
         [0.07, 0, 0, 0, 0],
-        [0.09, 0, 0, 0, 0],
+        [0.01, 0, 0, 0, 0],
     ]
+)
+
+P_SD = np.array(
+    [[0.0775, -0.0087], [-0.1066, 0.0299], [0.0440, -0.0129], [0.8043, -0.7577]]
 )
 
 freq = 10
 step = 1 / freq
-actionTime = 5
-restTime = 25
+actionTime = 10
+restTime = 50
 cycles = 3
 
 Parameters = {
@@ -61,6 +65,7 @@ Parameters = {
     "C": C,
     "freq": freq,
     "step": step,
+    "P_SD": P_SD,
     "actionTime": actionTime,
     "restTime": restTime,
     "cycles": cycles,
