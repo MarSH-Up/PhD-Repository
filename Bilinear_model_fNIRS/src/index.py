@@ -8,6 +8,8 @@ from components.BilinearModel_StimulusGenerator import (
 )
 from components.Parameters_case5 import Parameters
 
+from Bilinear_model_fNIRS.src.components.BilinerModel_Noises import awgn
+
 
 def on_key(event):
     if event.key == "escape":
@@ -32,22 +34,28 @@ def fNIRS_Process():
 
 
 def main():
-    U_stimulus, timestamps, Z, qj, pj = fNIRS_Process()
+    U_stimulus, timestamps, Z, qj, pj, Y = fNIRS_Process()
 
-    fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 18))
+    # Initialize the plotting layout
+    fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(5, 1, figsize=(10, 18))
 
+    # Plotting functions from BilinearModel_Plots
     plot_Stimulus(U_stimulus, timestamps, fig, ax1)
     plot_neurodynamics(Z, timestamps, fig, ax2)
     plot_DHDQ(qj, pj, timestamps, fig, ax3)
+    plot_Y(Y, timestamps, fig, ax4)
 
+    # Adding noise to the signal and plotting it
+    noisy_signal = awgn(Y, 5, "measured")
+    plot_Y(noisy_signal, timestamps, fig, ax5)
+
+    # Binding the on_key event function to the figure
     fig.canvas.mpl_connect("key_press_event", on_key)
 
+    # Adjusting the layout of the plots and displaying them
     plt.tight_layout()
     plt.show()
 
 
 if __name__ == "__main__":
     main()
-
-
-# https://towardsdatascience.com/ordinal-differential-equation-ode-in-python-8dc1de21323b
