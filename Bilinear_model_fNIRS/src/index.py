@@ -26,7 +26,7 @@ from Bilinear_model_fNIRS.src.components.BilinearModel_StimulusGenerator import 
     bilinear_model_stimulus_train_generator,
 )
 from Bilinear_model_fNIRS.src.components.BilinerModel_Noises import awgn
-from Bilinear_model_fNIRS.src.components.Parameters.Parameters import Parameters
+from Bilinear_model_fNIRS.src.components.Parameters.Parameters_case5 import Parameters
 
 
 # Event handler function to close all the plots if "escape" key is pressed
@@ -88,7 +88,7 @@ def main():
     plot_Y(Y, timestamps, fig, ax4)
 
     # Adding noise to the signal and plotting it
-    noisy_signal = awgn(Y, 20, "measured")
+    noisy_signal = awgn(Y, 5, "measured")
     plot_Y(noisy_signal, timestamps, fig, ax5)
 
     # Binding the on_key event function to the figure
