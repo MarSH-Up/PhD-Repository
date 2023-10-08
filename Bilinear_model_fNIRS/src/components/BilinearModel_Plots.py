@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def plot_neurodynamics(Z, timestamps, fig, ax):
@@ -23,7 +24,11 @@ def plot_neurodynamics(Z, timestamps, fig, ax):
     ax.set_title("Neurodynamics vs Time")
     ax.legend()
     ax.grid(True)
+<<<<<<< HEAD
     fig.show()
+=======
+    # fig.show()
+>>>>>>> f7ef384dba2f1988847fc43acd5a8d0ef88b66ab
 
 
 def plot_Stimulus(U_stimulus, timestamps, fig, ax):
@@ -49,7 +54,7 @@ def plot_Stimulus(U_stimulus, timestamps, fig, ax):
     ax.set_title("Stimulus vs Time")
     ax.legend([f"Region {i+1}" for i in range(nRegions)])
     ax.grid(True)
-    fig.show()
+    # fig.show()
 
 
 def plot_DHDQ(dq, dh, timestamps, fig, ax):
@@ -80,7 +85,10 @@ def plot_DHDQ(dq, dh, timestamps, fig, ax):
     ax.set_title("dq and dh over time")
     ax.legend()
     ax.grid(True)
+<<<<<<< HEAD
     fig.show()
+=======
+    # fig.show()
 
 
 def plot_Y(Y, timestamps, fig, ax):
@@ -109,7 +117,8 @@ def plot_Y(Y, timestamps, fig, ax):
     ax.set_title("Optical Density Changes over time for dxy-Hb and oxy-Hb")
     ax.legend()
     ax.grid(True)
-    fig.show()
+    # fig.show()
+>>>>>>> f7ef384dba2f1988847fc43acd5a8d0ef88b66ab
 
 
 # Example usage:

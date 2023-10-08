@@ -22,15 +22,15 @@ from Bilinear_model_fNIRS.src.components.BilinearModel_Optics import (
     BilinearModel_Optics,
 )
 from Bilinear_model_fNIRS.src.components.BilinearModel_Plots import *
-from Bilinear_model_fNIRS.src.components.BilinearModel_StimulusGenerator import (
-    bilinear_model_stimulus_train_generator,
-)
+from Bilinear_model_fNIRS.src.components.BilinearModel_StimulusGenerator import *
 from Bilinear_model_fNIRS.src.components.BilinerModel_Noises import awgn
-from Bilinear_model_fNIRS.src.components.Parameters.Parameters_case5 import Parameters
+from Bilinear_model_fNIRS.src.components.Parameters.Parameters_case3 import Parameters
 
 
 # Event handler function to close all the plots if "escape" key is pressed
 def on_key(event):
+    if event.key == "escape":
+        plt.close("all")
     if event.key == "escape":
         plt.close("all")
 
@@ -47,16 +47,35 @@ def fNIRS_Process():
         dq, dh: Derivatives of blood volume and deoxyhemoglobin concentration
         Y: Optics output
     """
+<<<<<<< HEAD
 
     # Generate stimulus train
+=======
+    # Define parameters
+    freq = 10  # Sampling frequency
+    nRegions = 3  # Number of brain regions
+
+    # Different action times, rest times, and cycles for each region
+    action_times = [0, 3, 5]  # in seconds
+    rest_times = [0, 27, 25]  # in seconds
+    cycles_list = [0, 2, 3]  # Number of cycles
+
+    # Generate the stimulus train
+>>>>>>> f7ef384dba2f1988847fc43acd5a8d0ef88b66ab
     U_stimulus, timestamps = bilinear_model_stimulus_train_generator(
+        freq, action_times, rest_times, cycles_list, nRegions
+    )
+
+    # Generate stimulus train
+    """
+    U_stimulus, timestamps = bilinear_model_stimulus_train_generator_constant(
         Parameters["freq"],
         Parameters["actionTime"],
         Parameters["restTime"],
         Parameters["cycles"],
         Parameters["A"].shape[0],
     )
-
+"""
     # Initialize the state of the neurodynamics
     Z0 = np.zeros([Parameters["A"].shape[0]])
 
@@ -73,6 +92,8 @@ def fNIRS_Process():
 
     return U_stimulus, timestamps, Z, dq, dh, Y
 
+<<<<<<< HEAD
+=======
 
 # Main function that calls fNIRS_Process and then plots the results
 def main():
@@ -94,6 +115,7 @@ def main():
     # Binding the on_key event function to the figure
     fig.canvas.mpl_connect("key_press_event", on_key)
 
+>>>>>>> f7ef384dba2f1988847fc43acd5a8d0ef88b66ab
     # Adjusting the layout of the plots and displaying them
     plt.tight_layout()
     plt.show()
@@ -102,3 +124,6 @@ def main():
 # If this script is run directly (not imported), execute the main function
 if __name__ == "__main__":
     main()
+
+
+# https://towardsdatascience.com/ordinal-differential-equation-ode-in-python-8dc1de21323b

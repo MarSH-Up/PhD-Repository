@@ -26,7 +26,7 @@ def Neurodynamics_Model(Z, t, A, B, C, U):
     T = np.zeros(nRegions)
     for uu in range(B.shape[2]):
         tmp = U[uu, index] * B[:, :, uu]
-        T = -0.5 * np.exp(T + tmp)
+        T += -0.5 * np.exp(np.sum(tmp, axis=1))
 
     # Modify the diagonal of the connectivity matrix A
     SI = np.diag(A)
