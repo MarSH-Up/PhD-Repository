@@ -22,11 +22,9 @@ from Bilinear_model_fNIRS.src.components.BilinearModel_Optics import (
     BilinearModel_Optics,
 )
 from Bilinear_model_fNIRS.src.components.BilinearModel_Plots import *
-from Bilinear_model_fNIRS.src.components.BilinearModel_StimulusGenerator import (
-    bilinear_model_stimulus_train_generator,
-)
+from Bilinear_model_fNIRS.src.components.BilinearModel_StimulusGenerator import *
 from Bilinear_model_fNIRS.src.components.BilinerModel_Noises import awgn
-from Bilinear_model_fNIRS.src.components.Parameters.Parameters_case5 import Parameters
+from Bilinear_model_fNIRS.src.components.Parameters.Parameters_case3 import Parameters
 
 
 # Event handler function to close all the plots if "escape" key is pressed
@@ -47,16 +45,30 @@ def fNIRS_Process():
         dq, dh: Derivatives of blood volume and deoxyhemoglobin concentration
         Y: Optics output
     """
+    # Define parameters
+    freq = 10  # Sampling frequency
+    nRegions = 3  # Number of brain regions
+
+    # Different action times, rest times, and cycles for each region
+    action_times = [0, 3, 5]  # in seconds
+    rest_times = [0, 27, 25]  # in seconds
+    cycles_list = [0, 2, 3]  # Number of cycles
+
+    # Generate the stimulus train
+    U_stimulus, timestamps = bilinear_model_stimulus_train_generator(
+        freq, action_times, rest_times, cycles_list, nRegions
+    )
 
     # Generate stimulus train
-    U_stimulus, timestamps = bilinear_model_stimulus_train_generator(
+    """
+    U_stimulus, timestamps = bilinear_model_stimulus_train_generator_constant(
         Parameters["freq"],
         Parameters["actionTime"],
         Parameters["restTime"],
         Parameters["cycles"],
         Parameters["A"].shape[0],
     )
-
+"""
     # Initialize the state of the neurodynamics
     Z0 = np.zeros([Parameters["A"].shape[0]])
 
