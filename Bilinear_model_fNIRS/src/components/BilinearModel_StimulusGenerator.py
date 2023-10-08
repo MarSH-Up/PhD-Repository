@@ -1,11 +1,7 @@
 import numpy as np
 
 
-<<<<<<< HEAD
-def bilinear_model_stimulus_train_generator(
-=======
 def bilinear_model_stimulus_train_generator_constant(
->>>>>>> f7ef384dba2f1988847fc43acd5a8d0ef88b66ab
     freq, action_time, rest_time, cycles, nRegions
 ):
     """
