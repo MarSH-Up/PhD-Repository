@@ -1,10 +1,30 @@
-import matplotlib.pyplot as plt
-from components.BilinearModel_Neurodynamics import bilinear_model_neurodynamics_z
-from components.BilinearModel_Plots import *
-from components.BilinearModel_StimulusGenerator import (
-    bilinear_model_stimulus_train_generator,
+# Importing necessary libraries
+import os
+import sys
+
+import numpy as np
+from matplotlib import pyplot as plt
+
+# Define paths to easily import custom modules.
+# Assuming the script is located two directories deep from the root of the project.
+current_directory = os.path.dirname(os.path.abspath(__file__))
+root_directory = os.path.abspath(os.path.join(current_directory, "..", ".."))
+
+# Adding the root directory to the system path
+sys.path.append(root_directory)
+
+# Importing components of the Bilinear_model_fNIRS project
+from Bilinear_model_fNIRS.src.components.BilinearModel_Hemodynamics import Hemodynamics
+from Bilinear_model_fNIRS.src.components.BilinearModel_Neurodynamics import (
+    Neurodynamics,
 )
-from components.Parameters import Parameters
+from Bilinear_model_fNIRS.src.components.BilinearModel_Optics import (
+    BilinearModel_Optics,
+)
+from Bilinear_model_fNIRS.src.components.BilinearModel_Plots import *
+from Bilinear_model_fNIRS.src.components.BilinearModel_StimulusGenerator import *
+from Bilinear_model_fNIRS.src.components.BilinerModel_Noises import awgn
+from Bilinear_model_fNIRS.src.components.Parameters.Parameters_case3 import Parameters
 
 
 # Event handler function to close all the plots if "escape" key is pressed
@@ -27,31 +47,75 @@ def fNIRS_Process():
         dq, dh: Derivatives of blood volume and deoxyhemoglobin concentration
         Y: Optics output
     """
+<<<<<<< HEAD
 
     # Generate stimulus train
+=======
+    # Define parameters
+    freq = 10  # Sampling frequency
+    nRegions = 3  # Number of brain regions
+
+    # Different action times, rest times, and cycles for each region
+    action_times = [0, 3, 5]  # in seconds
+    rest_times = [0, 27, 25]  # in seconds
+    cycles_list = [0, 2, 3]  # Number of cycles
+
+    # Generate the stimulus train
+>>>>>>> f7ef384dba2f1988847fc43acd5a8d0ef88b66ab
     U_stimulus, timestamps = bilinear_model_stimulus_train_generator(
+        freq, action_times, rest_times, cycles_list, nRegions
+    )
+
+    # Generate stimulus train
+    """
+    U_stimulus, timestamps = bilinear_model_stimulus_train_generator_constant(
         Parameters["freq"],
         Parameters["actionTime"],
         Parameters["restTime"],
         Parameters["cycles"],
+        Parameters["A"].shape[0],
     )
-    Z = bilinear_model_neurodynamics_z(
-        Parameters["A"],
-        Parameters["B"],
-        Parameters["C"],
-        U_stimulus,
-        Parameters["step"],
+"""
+    # Initialize the state of the neurodynamics
+    Z0 = np.zeros([Parameters["A"].shape[0]])
+
+    # Compute the neurodynamics of the system
+    Z = Neurodynamics(
+        Z0, timestamps, Parameters["A"], Parameters["B"], Parameters["C"], U_stimulus
     )
 
-    fig1, ax1 = plt.subplots(figsize=(10, 6))
-    fig2, ax2 = plt.subplots(figsize=(10, 6))
+    # Process hemodynamics
+    qj, pj = Hemodynamics(Z.T, Parameters["P_SD"], Parameters["step"])
 
-    plot_Stimulus(U_stimulus, timestamps, fig1, ax1)
-    plot_neurodynamics(Z, timestamps, fig2, ax2)
+    # Process optics
+    Y, dq, dh = BilinearModel_Optics(pj, qj, U_stimulus, Parameters["A"])
 
-    fig1.canvas.mpl_connect("key_press_event", on_key)
-    fig2.canvas.mpl_connect("key_press_event", on_key)
+    return U_stimulus, timestamps, Z, dq, dh, Y
 
+<<<<<<< HEAD
+=======
+
+# Main function that calls fNIRS_Process and then plots the results
+def main():
+    U_stimulus, timestamps, Z, qj, pj, Y = fNIRS_Process()
+
+    # Initialize the plotting layout
+    fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(5, 1, figsize=(10, 18))
+
+    # Plotting functions from BilinearModel_Plots
+    plot_Stimulus(U_stimulus, timestamps, fig, ax1)
+    plot_neurodynamics(Z, timestamps, fig, ax2)
+    plot_DHDQ(qj, pj, timestamps, fig, ax3)
+    plot_Y(Y, timestamps, fig, ax4)
+
+    # Adding noise to the signal and plotting it
+    noisy_signal = awgn(Y, 5, "measured")
+    plot_Y(noisy_signal, timestamps, fig, ax5)
+
+    # Binding the on_key event function to the figure
+    fig.canvas.mpl_connect("key_press_event", on_key)
+
+>>>>>>> f7ef384dba2f1988847fc43acd5a8d0ef88b66ab
     # Adjusting the layout of the plots and displaying them
     plt.tight_layout()
     plt.show()
