@@ -1,7 +1,24 @@
 import numpy as np
+from scipy.integrate import odeint
 
 
-def bilinear_model_neurodynamics_z(A, B, C, U, step):
+def Neurodynamics_Model(Z, t, A, B, C, U):
+    """
+    Neurodynamics model for multiple brain regions.
+
+    Parameters:
+    - Z: The state of the system. Shape: (nRegions,).
+    - t: Current time.
+    - A: Connectivity matrix. Shape: (nRegions, nRegions).
+    - B: Influence matrix. Shape: (nRegions, nRegions, number of inputs).
+    - C: Input effect matrix. Shape: (nRegions, number of inputs).
+    - U: Input matrix. Shape: (number of inputs, number of timestamps).
+
+    Returns:
+    - dZdt: The rate of change of the system's state.
+    """
+
+    # Get the number of brain regions
     nRegions = A.shape[0]
     M = U.shape[0]
     simulationLength = U.shape[1]

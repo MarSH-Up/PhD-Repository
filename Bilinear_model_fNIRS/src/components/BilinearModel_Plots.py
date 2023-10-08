@@ -11,7 +11,6 @@ def plot_neurodynamics(Z, timestamps, fig, ax):
     ax.set_title("Neurodynamics vs Time")
     ax.legend()
     ax.grid(True)
-    fig.tight_layout()
     fig.show()
 
 
@@ -27,5 +26,9 @@ def plot_Stimulus(U_stimulus, timestamps, fig, ax):
     ax.set_title("Stimulus vs Time")
     ax.legend()
     ax.grid(True)
-    fig.tight_layout()
     fig.show()
+
+
+# Example usage:
+# fig, ax = plt.subplots(figsize=(10,6))
+# plot_Y(Y, timestamps, fig, ax)

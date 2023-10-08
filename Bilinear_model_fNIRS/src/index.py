@@ -7,12 +7,28 @@ from components.BilinearModel_StimulusGenerator import (
 from components.Parameters import Parameters
 
 
+# Event handler function to close all the plots if "escape" key is pressed
 def on_key(event):
+    if event.key == "escape":
+        plt.close("all")
     if event.key == "escape":
         plt.close("all")
 
 
-def main():
+# Main fNIRS processing function
+def fNIRS_Process():
+    """
+    Process the fNIRS data.
+
+    Returns:
+        U_stimulus: Stimulus signal
+        timestamps: Array of timestamps
+        Z: Neurodynamics
+        dq, dh: Derivatives of blood volume and deoxyhemoglobin concentration
+        Y: Optics output
+    """
+
+    # Generate stimulus train
     U_stimulus, timestamps = bilinear_model_stimulus_train_generator(
         Parameters["freq"],
         Parameters["actionTime"],
@@ -36,9 +52,12 @@ def main():
     fig1.canvas.mpl_connect("key_press_event", on_key)
     fig2.canvas.mpl_connect("key_press_event", on_key)
 
+    # Adjusting the layout of the plots and displaying them
+    plt.tight_layout()
     plt.show()
 
 
+# If this script is run directly (not imported), execute the main function
 if __name__ == "__main__":
     main()
 
