@@ -114,3 +114,6 @@ def main():
 # If this script is run directly (not imported), execute the main function
 if __name__ == "__main__":
     main()
+
+
+# https://towardsdatascience.com/ordinal-differential-equation-ode-in-python-8dc1de21323b

@@ -30,6 +30,7 @@ def bilinear_model_stimulus_train_generator_constant(
     # Fill U with pulses (value 1) representing stimulus activation for each cycle
     for i in range(cycles):
         U[:, i * cycle_samples : i * cycle_samples + activation_samples] = 1
+        U[:, i * cycle_samples : i * cycle_samples + activation_samples] = 1
 
     # Create timestamps for the entire period
     Time_period = (action_time + rest_time) * cycles
