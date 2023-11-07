@@ -1,6 +1,6 @@
 import numpy as np
 from BilinearModel_Hemodynamics import Hemodynamics
-from BilinearModel_Neurodynamics import Neurodynamics
+from BilinearModel_Neurodynamics_v1 import Neurodynamics
 from BilinearModel_Optics import BilinearModel_Optics
 from BilinearModel_StimulusGenerator import *
 
@@ -22,7 +22,7 @@ def fNIRS_Process(Parameters):
     """
 
     # Generate stimulus train
-    U_stimulus, timestamps = bilinear_model_stimulus_train_generator_constant(
+    U_stimulus, timestamps = bilinear_model_stimulus_train_generator(
         Parameters["freq"],
         Parameters["actionTime"],
         Parameters["restTime"],

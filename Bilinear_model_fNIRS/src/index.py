@@ -9,13 +9,14 @@ from matplotlib import pyplot as plt
 # Assuming the script is located two directories deep from the root of the project.
 current_directory = os.path.dirname(os.path.abspath(__file__))
 root_directory = os.path.abspath(os.path.join(current_directory, "..", ".."))
-
+print(root_directory)
 # Adding the root directory to the system path
 sys.path.append(root_directory)
 
+
 # Importing components of the Bilinear_model_fNIRS project
 from Bilinear_model_fNIRS.src.components.BilinearModel_Hemodynamics import Hemodynamics
-from Bilinear_model_fNIRS.src.components.BilinearModel_Neurodynamics import (
+from Bilinear_model_fNIRS.src.components.BilinearModel_Neurodynamics_v1 import (
     Neurodynamics,
 )
 from Bilinear_model_fNIRS.src.components.BilinearModel_Optics import (
@@ -24,7 +25,7 @@ from Bilinear_model_fNIRS.src.components.BilinearModel_Optics import (
 from Bilinear_model_fNIRS.src.components.BilinearModel_Plots import *
 from Bilinear_model_fNIRS.src.components.BilinearModel_StimulusGenerator import *
 from Bilinear_model_fNIRS.src.components.BilinerModel_Noises import awgn
-from Bilinear_model_fNIRS.src.components.Parameters.Parameters_case3 import Parameters
+from Bilinear_model_fNIRS.src.components.Parameters.Parameters import Parameters
 
 
 # Event handler function to close all the plots if "escape" key is pressed
@@ -65,7 +66,7 @@ def fNIRS_Process():
 
     # Generate stimulus train
    """
-    U_stimulus, timestamps = bilinear_model_stimulus_train_generator_constant(
+    U_stimulus, timestamps = bilinear_model_stimulus_train_generator(
         Parameters["freq"],
         Parameters["actionTime"],
         Parameters["restTime"],
@@ -77,6 +78,7 @@ def fNIRS_Process():
     Z0 = np.zeros([Parameters["A"].shape[0]])
 
     # Compute the neurodynamics of the system
+    print(U_stimulus)
     Z = Neurodynamics(
         Z0, timestamps, Parameters["A"], Parameters["B"], Parameters["C"], U_stimulus
     )

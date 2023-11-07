@@ -21,7 +21,7 @@ def write_to_csv(Y, timestamps, filename="output.csv"):
         writer = csv.writer(file)
 
         # Write the header
-        header = ["Timestamps"] + [f"Region_{i+1}" for i in range(Y.shape[0])]
+        header = ["Timestamps"] + [f"Channel{i+1}" for i in range(Y.shape[0])]
         writer.writerow(header)
 
         # Write the data
