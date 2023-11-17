@@ -3,13 +3,14 @@ from BilinearModel_Hemodynamics import Hemodynamics
 from BilinearModel_Neurodynamics_v1 import Neurodynamics
 from BilinearModel_Optics import BilinearModel_Optics
 from BilinearModel_StimulusGenerator import *
+from BilinearModel_SyntheticNoise import *
 
 P_SD = np.array(
     [[0.0775, -0.0087], [-0.1066, 0.0299], [0.0440, -0.0129], [0.8043, -0.7577]]
 )
 
 
-def fNIRS_Process(Parameters):
+def fNIRS_Process(Parameters, NoiseSelection):
     """
     Process the fNIRS data.
 
