@@ -9,14 +9,17 @@ B = np.zeros((2, 2, 2))
 B[:, :, 0] = B1
 B[:, :, 1] = B2
 
-C = np.array([[0.08, 0], [0.06, 0]])
+C = np.array([[0.08, 0], [0, 0.06]])
 
-freq = 10
+freq = 10.84
 step = 1 / freq
 
-actionTime = 5
-restTime = 25
-cycles = 2
+actionTime = [
+    5,
+    5,
+]
+restTime = [25, 25]
+cycles = [5, 5]
 
 P_SD = np.array(
     [[0.0775, -0.0087], [-0.1066, 0.0299], [0.0440, -0.0129], [0.8043, -0.7577]]

@@ -79,3 +79,11 @@ def Hemodynamics(Z, P_SD, Step):
         fjout_s1[:, t] = Efp
 
     return qj, pj
+
+
+def HemoglobinConcentrations(qj, pj):
+    deltaQ = (qj - 1) * (71 * (1 - 0, 65))
+    deltaP = (pj - 1) * 71
+    deltaH = deltaP - deltaQ
+
+    return deltaH, deltaQ
