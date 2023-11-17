@@ -14,10 +14,7 @@ C = np.array([[0.08, 0], [0, 0.06]])
 freq = 10.84
 step = 1 / freq
 
-actionTime = [
-    5,
-    5,
-]
+actionTime = [5, 5]
 restTime = [25, 25]
 cycles = [5, 5]
 

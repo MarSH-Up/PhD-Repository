@@ -13,14 +13,11 @@ print(root_directory)
 # Adding the root directory to the system path
 sys.path.append(root_directory)
 
-
-# Importing components of the Bilinear_model_fNIRS project
 from Bilinear_model_fNIRS.src.components.BilinearModel_Hemodynamics import Hemodynamics
 from Bilinear_model_fNIRS.src.components.BilinearModel_Neurodynamics_v1 import (
     Neurodynamics,
 )
 from Bilinear_model_fNIRS.src.components.BilinearModel_Optics import (
-    BilinearModel_Optics,
     calculate_hemoglobin_changes,
     compute_optical_response,
 )
@@ -61,6 +58,8 @@ def fNIRS_Process(NoiseSelection):
         dq, dh: Derivatives of blood volume and deoxyhemoglobin concentration
         Y: Optics output
     """
+    print(Parameters["actionTime"])
+
     U_stimulus, timestamps = bilinear_model_stimulus_train_generator(
         freq, action_times, rest_times, cycles_list, nRegions
     )
@@ -164,6 +163,3 @@ def main():
 # If this script is run directly (not imported), execute the main function
 if __name__ == "__main__":
     main()
-
-
-# https://towardsdatascience.com/ordinal-differential-equation-ode-in-python-8dc1de21323b
