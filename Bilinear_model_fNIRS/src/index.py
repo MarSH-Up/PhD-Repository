@@ -130,7 +130,7 @@ def fNIRS_Process(NoiseSelection):
 # Main function that calls fNIRS_Process and then plots the results
 def main():
     U_stimulus, timestamps, Z, dq, dh, Y, qj_clean, pj_clean = fNIRS_Process(
-        "Semisynthetic"
+        "Synthetic"
     )
 
     # Initialize the plotting layout
@@ -154,3 +154,6 @@ def main():
 # If this script is run directly (not imported), execute the main function
 if __name__ == "__main__":
     main()
+
+
+# https://towardsdatascience.com/ordinal-differential-equation-ode-in-python-8dc1de21323b
