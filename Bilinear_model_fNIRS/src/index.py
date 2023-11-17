@@ -62,13 +62,19 @@ def fNIRS_Process(NoiseSelection):
         Y: Optics output
     """
     U_stimulus, timestamps = bilinear_model_stimulus_train_generator(
+        freq, action_times, rest_times, cycles_list, nRegions
+    )
+
+    # Generate stimulus train
+    """
+    U_stimulus, timestamps = bilinear_model_stimulus_train_generator_constant(
         Parameters["freq"],
         Parameters["actionTime"],
         Parameters["restTime"],
         Parameters["cycles"],
         Parameters["A"].shape[0],
     )
-
+"""
     # Initialize the state of the neurodynamics
     Z0 = np.zeros([Parameters["A"].shape[0]])
 
@@ -127,6 +133,8 @@ def fNIRS_Process(NoiseSelection):
 
     return U_stimulus, timestamps, Z, dq, dh, Y, qj, pj
 
+<<<<<<< HEAD
+=======
 
 # Main function that calls fNIRS_Process and then plots the results
 def main():
@@ -147,6 +155,7 @@ def main():
     # Binding the on_key event function to the figure
     fig.canvas.mpl_connect("key_press_event", on_key)
 
+>>>>>>> f7ef384dba2f1988847fc43acd5a8d0ef88b66ab
     # Adjusting the layout of the plots and displaying them
     plt.tight_layout()
     plt.show()
